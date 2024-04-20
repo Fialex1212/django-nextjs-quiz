@@ -1,0 +1,22 @@
+{% extends 'quiz_app/base.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+<ul>
+{% for question in quiz.question_set.all %}
+    <li>{{ question }}</li>
+    <ul>
+        {% for answer in question.answer_set.all %}
+            <li>{{answer}} {% if answer.is_correct %}(Correct){% endif %}</li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

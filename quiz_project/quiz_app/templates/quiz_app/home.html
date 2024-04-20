@@ -1,0 +1,17 @@
+{% extends 'quiz_app/base.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+{% for quiz in quizzes %}
+<ul>
+    <li><a href="{% url 'quiz' pk=quiz.pk %}">{{quiz}}</a></li>
+</ul>
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
