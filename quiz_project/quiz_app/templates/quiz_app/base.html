@@ -3,28 +3,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'quiz_app/css/base.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <title>{% block title %}Home{% endblock %}</title>
 </head>
 <body>
-<a href="{% url 'logout' %}">Logout</a>
-<form action="{% url 'search' %}" method="GET">
-    <input type="text" name="q">
-</form>
-{% block content %}
+    <div class="user">
+        {% if request.user.userprofile.avatar %}
+            <img src="{{request.user.userprofile.avatar.url}}" alt="" class="user-img">
+        {% else %}
+            <img src="" alt="" class="user-img">
+        {% endif %}
+        <p class="user-name">{{request.user.username}}</p>
+    </div>
+    <a href="{% url 'logout' %}">Logout</a>
+    <div class="search-bar">
+        <form class="search-bar-form" method="GET" action="{% url 'search' %}">
+            <input class="form-input" type="text" placeholder="Search quiz" name="q">
+        </form>
+    </div>
+    <div class="side-bar">
+        <img src="" alt="" class="side-bar-img">
+        <div class="line"></div>
+        <img src="" alt="" class="side-bar-img">
+        <div class="line"></div>
+        <img src="" alt="" class="side-bar-img">
+    </div>
+    <div class="container">
+        {% block content %}
 
-{% endblock %}
-
+        {% endblock %}
+    </div>
 
 {% block scripts %}
 
 {% endblock %}
-
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
 </body>
 </html>

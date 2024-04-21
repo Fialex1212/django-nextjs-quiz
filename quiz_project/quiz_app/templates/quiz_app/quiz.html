@@ -9,7 +9,13 @@
     <li>{{ question }}</li>
     <ul>
         {% for answer in question.answer_set.all %}
-            <li>{{answer}} {% if answer.is_correct %}(Correct){% endif %}</li>
+            <li>
+                {{ answer.content }}
+                {% if answer.content_image %}
+                    <img src="{{ answer.content_image.url }}" alt="{{ answer }}">
+                {% endif %}
+                {% if answer.is_correct %}(Correct){% endif %}
+            </li>
         {% endfor %}
     </ul>
 {% endfor %}
