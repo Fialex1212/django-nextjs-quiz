@@ -29,7 +29,7 @@ def sign_up_page(request):
                 messages.success(request, 'Account was successful created' + username)
                 return redirect('login')
     context = {'form': form}
-    return render(request, 'quiz_app/sign_up.html', context)
+    return render(request, 'quiz_app/login__sign_up/sign_up.html', context)
 
 
 def login_page(request):
@@ -47,7 +47,7 @@ def login_page(request):
             else:
                 messages.error(request, 'Username or password incorrect')
 
-    return render(request, 'quiz_app/login.html')
+    return render(request, 'quiz_app/login__sign_up/login.html')
 
 
 def logout_page(request):
@@ -59,11 +59,8 @@ def logout_page(request):
 #main
 def home(request):
     quizzes = Quiz.objects.all()
-    like_counts = {}
-    for quiz in quizzes:
-        like_counts[quiz.pk] = LikeQuiz.objects.filter(quiz=quiz).count()
-    context = {"title": 'home', 'quizzes': quizzes, 'like_counts': like_counts}
-    return render(request, 'quiz_app/home.html', context)
+    context = {"title": 'home', 'quizzes': quizzes}
+    return render(request, 'quiz_app/main/home.html', context)
 
 
 def search(request):
@@ -74,7 +71,7 @@ def search(request):
     if query:  # Check if query parameter exists
         quizzes = Quiz.objects.filter(title__icontains=query)
     context = {'quizzes': quizzes}
-    return render(request, 'quiz_app/search.html', context)
+    return render(request, 'quiz_app/main/search.html', context)
 
 
 #quiz

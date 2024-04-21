@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'quiz_app/css/login.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <form action="" class="form" method="POST">
+            {% csrf_token %}
+            <h3 class="form-title">Sign up</h3>
+            <div class="form-inputs">
+                <input type="text" class="form-input" name="username" placeholder="*Username">
+                <input type="text" class="form-input" name="email" placeholder="*Email">
+                <input type="text" class="form-input" name="password1" placeholder="*Password">
+                <input type="text" class="form-input" name="password2" placeholder="*Repeat password">
+            </div>
+            <button type="submit" class="form-btn">Submit</button>
+            <a href="{% url 'login' %}">Have account?</a>
+            {{form.errors}}
+        </form>
+    </div>
+</body>
+</html>

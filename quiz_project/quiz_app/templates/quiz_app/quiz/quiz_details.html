@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'quiz_app/base.html' %}
 
-</body>
-</html>
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+<ul>
+{% for question in quiz.question_set.all %}
+    <li>{{ question }}</li>
+    <ul>
+        {% for answer in question.answer_set.all %}
+            <li>
+                {{ answer.content }}
+                {% if answer.content_image %}
+                    <img src="{{ answer.content_image.url }}" alt="{{ answer }}">
+                {% endif %}
+                {% if answer.is_correct %}(Correct){% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

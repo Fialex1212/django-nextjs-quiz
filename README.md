@@ -1,11 +1,12 @@
-1. User set up(change username, email, password, avatar)
-2. Create a quiz
-3. Change a quiz
-4. Use imgages as answer +
-5. Search quiz +
-6. Ratting system
-7. Create style for site +-
-8. User profile
+1. User settings(change username, email, password, avatar)
+2. User profile 
+3. Create a quiz
+4. Change a quiz
+5. Use images as answer +
+6. Search quiz +
+7. Ratting system
+8. Login/Sign in pages +
+9. Like system
 
 
 
