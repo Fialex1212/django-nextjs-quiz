@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    created_at = models.DateTimeField(default=date.today, editable=False)
 
     class Meta:
         verbose_name_plural = "Quizzes"

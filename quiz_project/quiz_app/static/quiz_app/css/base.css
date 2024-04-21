@@ -10,7 +10,7 @@ body{
 
 .container{
     margin: 0 auto;
-    padding-top: 10%;
+    padding-top: 6%;
     width: 70%;
     height: 100dvh;
 }
@@ -38,6 +38,37 @@ body{
 
 .user-name{
     font-size: 24px;
+}
+
+.user-options {
+    display: none;
+    width: 180px;
+    height: 140px;
+    border-radius: 16px;
+}
+
+.user:hover + .user-options,
+.user-options:hover {
+    padding: 20px;
+    position: fixed;
+    display: flex;
+    background-color: #fff;
+    top: 100px;
+    right: 80px;
+    flex-direction: column;
+    justify-content: center;
+    row-gap: 10px;
+}
+
+.option{
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+.option-img{
+    width: 30px;
+    height: 30px;
 }
 
 /* user end */

@@ -6,22 +6,22 @@
 
 <div class="quizzes">
     {% for quiz in quizzes %}
+        <a href="{% url 'quiz' quiz_pk=quiz.pk %}">
             <div class="quiz">
                 <div class="quiz-rating">
                     <img src="/media/site/heart.png" alt="heart">
                     <p>2.2k</p>
                 </div>
-                <a href="{% url 'quiz' pk=quiz.pk %}">
                     <h3 class="quiz-title">{{quiz}}</h3>
-                </a>
                 <div class="quiz-info">
                     <div class="info-user">
                         <img src="/media/site/avatar.jpg" alt="user">
                         <p>{{quiz.author}}</p>
                     </div>
-                    <div class="date">26dec 2023</div>
+                    <div class="date">{{quiz.created_at}}</div>
                 </div>
             </div>
+        </a>
     {% endfor %}
 </div>
 

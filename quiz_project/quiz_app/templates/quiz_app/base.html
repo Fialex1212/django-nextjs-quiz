@@ -19,7 +19,20 @@
         {% endif %}
         <p class="user-name">{{request.user.username}}</p>
     </div>
-    <a href="{% url 'logout' %}">Logout</a>
+    <div class="user-options">
+        <div class="option">
+            <img class="option-img" src="/media/site/settings.png" alt="">
+            <a class="option-text" href="{% url 'user_settings' pk=request.user.pk %}">Settings</a>
+        </div>
+        <div class="option">
+            <img class="option-img" src="/media/site/heart.png" alt="">
+            <a class="option-text" href="{% url 'user_liked' pk=request.user.pk %}">Liked</a>
+        </div>
+        <div class="option">
+            <img class="option-img" src="/media/site/logout.png" alt="">
+            <a class="option-text" href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
     <div class="search-bar">
         <form class="search-bar-form" method="GET" action="{% url 'search' %}">
             <input class="form-input" type="text" placeholder="Search quiz" name="q">

@@ -5,31 +5,8 @@ from django.contrib import messages
 from .forms import CreateUserForm
 from .models import *
 
-def home(request):
-    quizzes = Quiz.objects.all()
-    like_counts = {}
-    for quiz in quizzes:
-        like_counts[quiz.pk] = LikeQuiz.objects.filter(quiz=quiz).count()
-    context = {"title": 'home', 'quizzes': quizzes, 'like_counts': like_counts}
-    return render(request, 'quiz_app/home.html', context)
 
-
-def user_page(request, pk):
-    user = User.objects.get(pk=pk)
-    context = {'user': user}
-    return render(request, 'quiz_app/user.html', context)
-
-
-def quiz(request,  pk):
-    quiz = Quiz.objects.get(pk=pk)
-    context = {'quiz': quiz}
-    return render(request, 'quiz_app/quiz.html', context)
-
-
-def create_quiz(request):
-    return render(request, 'quiz_app/create_quiz.html')
-
-
+#login/sign-in
 def sign_up_page(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -79,6 +56,16 @@ def logout_page(request):
     return redirect('login')
 
 
+#main
+def home(request):
+    quizzes = Quiz.objects.all()
+    like_counts = {}
+    for quiz in quizzes:
+        like_counts[quiz.pk] = LikeQuiz.objects.filter(quiz=quiz).count()
+    context = {"title": 'home', 'quizzes': quizzes, 'like_counts': like_counts}
+    return render(request, 'quiz_app/home.html', context)
+
+
 def search(request):
     query = request.GET.get('q')
     print(query)
@@ -88,5 +75,47 @@ def search(request):
         quizzes = Quiz.objects.filter(title__icontains=query)
     context = {'quizzes': quizzes}
     return render(request, 'quiz_app/search.html', context)
+
+
+#quiz
+def quiz_details(request,  pk):
+    quiz = Quiz.objects.get(pk=pk)
+    context = {'quiz': quiz}
+    return render(request, 'quiz_app/quiz/quiz_details.html', context)
+
+
+def quiz(request, quiz_pk, question_pk):
+    quiz = Quiz.objects.get(pk=quiz_pk)
+    question = Question.objects.filter(quiz__title__icontains=quiz.title, pk=question_pk)
+    context = {'quiz': quiz, 'question': question}
+    return render(request, 'quiz_app/quiz/quiz.html', context)
+
+
+def create_quiz(request):
+    return render(request, 'quiz_app/quiz/create_quiz.html')
+
+
+#user
+def user_page(request, pk):
+    user = User.objects.get(pk=pk)
+    context = {'user': user}
+    return render(request, 'quiz_app/user/user.html', context)
+
+
+def user_settings(request, pk):
+    user = User.objects.get(pk=pk)
+    context = {'user': user}
+    return render(request, 'quiz_app/user/settings.html', context)
+
+
+def user_liked(request, pk):
+    user = User.objects.get(pk=pk)
+    context = {'user': user}
+    return render(request, 'quiz_app/user/liked.html', context)
+
+
+
+
+
 
 
