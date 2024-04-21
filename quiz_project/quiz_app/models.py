@@ -42,7 +42,17 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = "Answers"
+        verbose_name_plural = "User profiles"
 
     def __str__(self):
         return self.user.username
+
+
+class LikeQuiz(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "like quizzes"
+
+

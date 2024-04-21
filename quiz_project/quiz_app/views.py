@@ -7,8 +7,17 @@ from .models import *
 
 def home(request):
     quizzes = Quiz.objects.all()
-    context = {"title": 'home', 'quizzes': quizzes}
+    like_counts = {}
+    for quiz in quizzes:
+        like_counts[quiz.pk] = LikeQuiz.objects.filter(quiz=quiz).count()
+    context = {"title": 'home', 'quizzes': quizzes, 'like_counts': like_counts}
     return render(request, 'quiz_app/home.html', context)
+
+
+def user_page(request, pk):
+    user = User.objects.get(pk=pk)
+    context = {'user': user}
+    return render(request, 'quiz_app/user.html', context)
 
 
 def quiz(request,  pk):
