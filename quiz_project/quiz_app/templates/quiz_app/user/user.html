@@ -1,12 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<img src="" alt="">
-<p>{{user.username}}</p>
-<p>{{user.email}}</p>
-</body>
-</html>
+{% extends 'quiz_app/base.html' %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'quiz_app/css/user.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="user-block">
+    <div class="user-left">
+        {% if user_avatar.avatar %}
+            <img src="{{ user_avatar.avatar.url }}" alt="">
+        {% else %}
+            <img src="/media/site/user_avatar.jpg" alt="">
+        {% endif %}
+    </div>
+    <div class="user-right">
+        <p class="user-name">{{user.username}}</p>
+        <p>{{user.pk}}</p>
+    </div>
+</div>
+
+<div class="user-quizzes">
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

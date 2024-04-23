@@ -5,17 +5,18 @@ body{
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-background: #4b6cb7;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #182848, #4b6cb7);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #182848, #4b6cb7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    background: #4b6cb7;
+    background: -webkit-linear-gradient(to right, #182848, #4b6cb7);
+    background: linear-gradient(to right, #182848, #4b6cb7);
 }
 
 .container{
     margin: 0 auto;
     padding-top: 6%;
+    padding-bottom: 4%;
     width: 70%;
-    height: 100dvh;
+    height: fit-content;
+    min-height: 100dvh;
 }
 
 /* user start */
@@ -46,7 +47,7 @@ background: linear-gradient(to right, #182848, #4b6cb7); /* W3C, IE 10+/ Edge, F
 .user-options {
     display: none;
     width: 180px;
-    height: 140px;
+    height: 200px;
     border-radius: 16px;
 }
 
@@ -86,6 +87,7 @@ background: linear-gradient(to right, #182848, #4b6cb7); /* W3C, IE 10+/ Edge, F
     position: fixed;
     right: 50%;
     transform: translate(50%, 50%);
+    border: 2px solid #000;
 }
 
 .search-bar-form, .form-input{

@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    {% block styles %}{% endblock %}
     <title>{% block title %}Home{% endblock %}</title>
 </head>
 <body>
@@ -32,20 +33,15 @@
             <img class="option-img" src="/media/site/logout.png" alt="">
             <a class="option-text" href="{% url 'logout' %}">Logout</a>
         </div>
+        <div class="option">
+            <img class="option-img" src="/media/site/logout.png" alt="">
+            <a class="option-text" href="{% url 'create_quiz' %}">Create quiz</a>
+        </div>
     </div>
     <div class="search-bar">
         <form class="search-bar-form" method="GET" action="{% url 'search' %}">
             <input class="form-input" type="text" placeholder="Search quiz" name="q">
         </form>
-    </div>
-    <div class="side-bar">
-        <a href="{% url 'home' %}">home</a>
-        <a href="{% url 'create_quiz' %}">Create quiz</a>
-        <img src="" alt="" class="side-bar-img">
-        <div class="line"></div>
-        <img src="" alt="" class="side-bar-img">
-        <div class="line"></div>
-        <img src="" alt="" class="side-bar-img">
     </div>
     <div class="container">
         {% block content %}

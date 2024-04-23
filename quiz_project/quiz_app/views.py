@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import CreateUserForm
+from django.utils import timezone
+from .forms import *
 from .models import *
+import time
 
 
 #login/sign-in
@@ -57,6 +59,10 @@ def logout_page(request):
 
 
 #main
+def preloader(request):
+    return render(request, 'quiz_app/preloader.html')
+
+
 def home(request):
     quizzes = Quiz.objects.all()
     context = {"title": 'home', 'quizzes': quizzes}
@@ -84,18 +90,36 @@ def quiz_details(request,  pk):
 def quiz(request, quiz_pk, question_pk):
     quiz = Quiz.objects.get(pk=quiz_pk)
     question = Question.objects.filter(quiz__title__icontains=quiz.title, pk=question_pk)
-    context = {'quiz': quiz, 'question': question}
+    context = {'quiz': quiz, 'question.css': question}
     return render(request, 'quiz_app/quiz/quiz.html', context)
 
 
 def create_quiz(request):
-    return render(request, 'quiz_app/quiz/create_quiz.html')
+    form = CreateQuiz()
+    if request.method == "POST":
+        form = CreateQuiz(request.POST)
+        title = request.POST.get('title')
+        if form.is_valid():
+            quiz = form.save(commit=False)
+            quiz.title = title
+            quiz.author = request.user
+            quiz.created_at = timezone.now()
+            quiz.save()
+            return redirect('quiz_details', pk=quiz.pk)
+    context = {'form': form}
+    return render(request, 'quiz_app/quiz/create_quiz.html', context)
+
+
+def quiz_result(request):
+    context = {}
+    return render(request, 'quiz_app/quiz/quiz_result', context)
 
 
 #user
 def user_page(request, pk):
     user = User.objects.get(pk=pk)
-    context = {'user': user}
+    user_avatar = UserProfile.objects.get(user=user.pk)
+    context = {'user': user, 'user_avatar': user_avatar}
     return render(request, 'quiz_app/user/user.html', context)
 
 

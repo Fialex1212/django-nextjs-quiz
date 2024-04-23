@@ -1,25 +1,31 @@
 {% extends 'quiz_app/base.html' %}
+{% load static %}
 
 {% block title %}{{title}}{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'quiz_app/css/question.css' %}">
+{% endblock %}
+
 {% block content %}
 
-<ul>
 {% for question in quiz.question_set.all %}
-    <li>{{ question }}</li>
-    <ul>
+<div class="question">
+    <h2 class="question-quiz">{{quiz.title}}</h2>
+    <p class="question-content">{{question}}</p>
+</div>
+<br><br>
+<div class="answers">
+    <form action="" method="POST">
         {% for answer in question.answer_set.all %}
-            <li>
-                {{ answer.content }}
-                {% if answer.content_image %}
-                    <img src="{{ answer.content_image.url }}" alt="{{ answer }}">
-                {% endif %}
+            <div class="answer">
+                {{answer.content }}
                 {% if answer.is_correct %}(Correct){% endif %}
-            </li>
+            </div>
         {% endfor %}
-    </ul>
+    </form>
+</div>
 {% endfor %}
-</ul>
 
 {% endblock %}
 

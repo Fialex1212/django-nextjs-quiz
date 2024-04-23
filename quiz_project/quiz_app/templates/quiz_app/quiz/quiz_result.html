@@ -1,10 +1,16 @@
 {% extends 'quiz_app/base.html' %}
+{% load static %}
 
 {% block title %}{{title}}{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'quiz_app/css/question.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>{{quiz.title}}</h1>
-<a href="{% url 'quiz' quiz_pk=quiz.pk question_pk=1 %}">Take Quiz</a>
+
+hello
+
 {% endblock %}
 
 {% block scripts %}

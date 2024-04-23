@@ -5,6 +5,7 @@ from datetime import date
 
 class Quiz(models.Model):
     title = models.CharField(max_length=100)
+    description = models.TextField(default='description')
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     created_at = models.DateTimeField(default=date.today, editable=False)
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'quiz_app/css/preloader.css' %}">
+    <title>Title</title>
+</head>
+<body>
+    <div class="preloder">
+        <div class="loder">
+
+        </div>
+    </div>
+    <script>
+        setTimeout(function(){
+            window.location.href = "{% url 'home' %}"
+        }, 3000)
+    </script>
+</body>
+</html>

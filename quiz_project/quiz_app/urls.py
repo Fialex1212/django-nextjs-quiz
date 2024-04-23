@@ -8,13 +8,15 @@ urlpatterns = [
     path('logout/', logout_page, name='logout'),
 
     #main
+    path('', preloader, name='preloader'),
     path('home/', home, name='home'),
     path('search/', search, name='search'),
 
     #quiz
     path('create_quiz/', create_quiz, name='create_quiz'),
     path('quiz/<int:pk>/', quiz_details, name='quiz_details'),
-    path('quiz/<int:quiz_pk>/question/<int:question_pk>', quiz, name='quiz'),
+    path('quiz/<int:quiz_pk>/question.css/<int:question_pk>', quiz, name='quiz'),
+    path('quiz/<int:quiz_pk>/score/', quiz_result, name='quiz_result'),
 
     #user
     path('user/<int:pk>/', user_page, name='user'),
