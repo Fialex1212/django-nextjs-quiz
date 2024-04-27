@@ -10,6 +10,7 @@
 10. Take test
 11. Quiz tags and description
 12. Searching by tags
+13. Error and success messages +
 
 
 git add .

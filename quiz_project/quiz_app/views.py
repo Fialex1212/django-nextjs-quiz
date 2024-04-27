@@ -87,10 +87,10 @@ def quiz_details(request,  pk):
     return render(request, 'quiz_app/quiz/quiz_details.html', context)
 
 
-def quiz(request, quiz_pk, question_pk):
-    quiz = Quiz.objects.get(pk=quiz_pk)
-    question = Question.objects.filter(quiz__pk=quiz_pk, pk=question_pk)
-    next_question = Question.objects.filter(quiz=quiz, pk__gt=question_pk).order_by('pk').first()
+def quiz(request, quiz_id, question_id):
+    quiz = Quiz.objects.get(id=quiz_id)
+    question = Question.objects.get(quiz__id=quiz_id, id=question_id)
+    next_question = Question.objects.filter(quiz__id=quiz_id, id__gt=question_id).order_by('id').first()
     context = {'quiz': quiz, 'question': question, 'next_question': next_question}
     return render(request, 'quiz_app/quiz/quiz.html', context)
 

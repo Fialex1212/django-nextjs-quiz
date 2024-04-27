@@ -4,6 +4,7 @@ from datetime import date
 
 
 class Quiz(models.Model):
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     description = models.TextField(default='description')
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -17,6 +18,7 @@ class Quiz(models.Model):
 
 
 class Question(models.Model):
+    id = models.AutoField(primary_key=True)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     content = models.TextField()
 
@@ -28,6 +30,7 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
+    id = models.AutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     content = models.TextField(blank=True, null=True)
     content_image = models.ImageField(upload_to='answer_images/', blank=True, null=True)

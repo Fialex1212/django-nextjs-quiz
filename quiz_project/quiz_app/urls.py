@@ -14,10 +14,9 @@ urlpatterns = [
 
     #quiz
     path('create_quiz/', create_quiz, name='create_quiz'),
-    path('quiz/<int:pk>/', quiz_details, name='quiz_details'),
-    path('quiz/<int:quiz_pk>/question/<int:question_pk>', quiz, name='quiz'),
-    path('quiz/<int:quiz_pk>/score/', quiz_result, name='quiz_result'),
-    path('quiz/wrong', quiz_wrong, name='quiz_wrong'),
+    path('quiz/<int:id>/', quiz_details, name='quiz_details'),
+    path('quiz/<int:quiz_id>/question/<int:question_id>', quiz, name='quiz'),
+    path('quiz_result/<int:id>', quiz_result, name='quiz_result'),
 
     #user
     path('user/<int:pk>/', user_page, name='user'),

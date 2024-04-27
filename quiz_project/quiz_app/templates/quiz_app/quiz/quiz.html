@@ -17,7 +17,12 @@
 <form action="" method="POST">
     <div class="answers">
         {% for answer in question.answer_set.all %}
-            <a class="answer" href="{% url 'quiz' quiz.pk next_question.pk %}">
+            <a class="answer" href="
+            {% if next_question %}
+                {% url 'quiz' quiz_id=quiz.id question_id=next_question.id %}
+            {% else %}
+                {% url 'quiz_result' quiz.id%}
+            {% endif %}">
                 {{answer.content }}
                 {% if answer.is_correct %}(Correct){% endif %}
             </a>
