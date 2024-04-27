@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             options={'verbose_name_plural': 'Answers'},
         ),
         migrations.AlterModelOptions(
-            name='question.css',
+            name='question',
             options={'verbose_name_plural': 'Questions'},
         ),
         migrations.AlterModelOptions(

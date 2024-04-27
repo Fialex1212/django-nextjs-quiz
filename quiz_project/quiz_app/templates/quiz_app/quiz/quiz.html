@@ -9,23 +9,21 @@
 
 {% block content %}
 
-{% for question in quiz.question_set.all %}
 <div class="question">
     <h2 class="question-quiz">{{quiz.title}}</h2>
-    <p class="question-content">{{question}}</p>
+    <p class="question-content">{{ question }}</p>
 </div>
 <br><br>
-<div class="answers">
-    <form action="" method="POST">
+<form action="" method="POST">
+    <div class="answers">
         {% for answer in question.answer_set.all %}
-            <div class="answer">
+            <a class="answer" href="{% url 'quiz' quiz.pk next_question.pk %}">
                 {{answer.content }}
                 {% if answer.is_correct %}(Correct){% endif %}
-            </div>
+            </a>
         {% endfor %}
-    </form>
-</div>
-{% endfor %}
+    </div>
+</form>
 
 {% endblock %}
 

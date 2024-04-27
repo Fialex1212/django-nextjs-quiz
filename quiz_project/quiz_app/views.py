@@ -89,8 +89,9 @@ def quiz_details(request,  pk):
 
 def quiz(request, quiz_pk, question_pk):
     quiz = Quiz.objects.get(pk=quiz_pk)
-    question = Question.objects.filter(quiz__title__icontains=quiz.title, pk=question_pk)
-    context = {'quiz': quiz, 'question.css': question}
+    question = Question.objects.filter(quiz__pk=quiz_pk, pk=question_pk)
+    next_question = Question.objects.filter(quiz=quiz, pk__gt=question_pk).order_by('pk').first()
+    context = {'quiz': quiz, 'question': question, 'next_question': next_question}
     return render(request, 'quiz_app/quiz/quiz.html', context)
 
 
@@ -113,6 +114,10 @@ def create_quiz(request):
 def quiz_result(request):
     context = {}
     return render(request, 'quiz_app/quiz/quiz_result', context)
+
+
+def quiz_wrong(request):
+    return render(request, 'quiz_app/quiz/quiz_result')
 
 
 #user

@@ -23,6 +23,6 @@
             <a href="{% url 'sign_up' %}">Don't have account?</a>
         </form>
     </div>
-    {{form.errors}}
+    {% include "quiz_app/message.html" %}
 </body>
 </html>

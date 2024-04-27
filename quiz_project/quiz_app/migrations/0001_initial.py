@@ -32,11 +32,11 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('content', models.TextField()),
                 ('is_correct', models.BooleanField(default=False)),
-                ('question.css', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quiz_app.question.css')),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quiz_app.question')),
             ],
         ),
         migrations.AddField(
-            model_name='question.css',
+            model_name='question',
             name='quiz',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='quiz_app.quiz'),
         ),
