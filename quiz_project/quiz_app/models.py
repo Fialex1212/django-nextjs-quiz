@@ -1,6 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+class Tag(models.Model):
+    content = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Tags"
+
+    def __str__(self):
+        return self.content
 
 
 class Quiz(models.Model):
@@ -9,6 +21,7 @@ class Quiz(models.Model):
     description = models.TextField(default='description')
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     created_at = models.DateTimeField(default=date.today, editable=False)
+    tags = models.ManyToManyField(Tag)
 
     class Meta:
         verbose_name_plural = "Quizzes"
@@ -21,6 +34,7 @@ class Question(models.Model):
     id = models.AutoField(primary_key=True)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     content = models.TextField()
+    content_image = models.ImageField(upload_to='question_images/', blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Questions"

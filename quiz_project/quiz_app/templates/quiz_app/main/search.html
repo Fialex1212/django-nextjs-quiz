@@ -6,7 +6,7 @@
 
 <div class="quizzes">
     {% for quiz in quizzes %}
-        <a href="{% url 'quiz_details' pk=quiz.pk %}">
+        <a href="{% url 'quiz_details' id=quiz.id %}">
             <div class="quiz">
                 <div class="quiz-rating">
                     <img src="/media/site/heart.png" alt="heart">

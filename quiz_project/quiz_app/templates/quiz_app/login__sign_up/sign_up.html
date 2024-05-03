@@ -23,7 +23,7 @@
             </div>
             <button type="submit" class="form-btn">Submit</button>
             <a href="{% url 'login' %}">Have account?</a>
-            {{form.errors}}
+            {% include "quiz_app/message.html" %}
         </form>
     </div>
 </body>

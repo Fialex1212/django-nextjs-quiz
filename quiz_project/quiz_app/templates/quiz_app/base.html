@@ -12,32 +12,39 @@
     <title>{% block title %}Home{% endblock %}</title>
 </head>
 <body>
-    <div class="user">
-        {% if request.user.userprofile.avatar %}
-            <img src="{{request.user.userprofile.avatar.url}}" alt="" class="user-img">
-        {% else %}
-            <img src="" alt="" class="user-img">
-        {% endif %}
-        <p class="user-name">{{request.user.username}}</p>
-    </div>
-    <div class="user-options">
-        <div class="option">
-            <img class="option-img" src="/media/site/settings.png" alt="">
-            <a class="option-text" href="{% url 'user_settings' pk=request.user.pk %}">Settings</a>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'user' pk=request.user.pk %}" class="user">
+            {% if request.user.userprofile.avatar %}
+                <img src="{{request.user.userprofile.avatar.url}}" alt="" class="user-img">
+            {% else %}
+                <img src="" alt="" class="user-img">
+            {% endif %}
+            <p class="user-name">{{request.user.username}}</p>
+        </a>
+        <div class="user-options">
+            <div class="option">
+                <img class="option-img" src="/media/site/settings.png" alt="">
+                <a class="option-text" href="{% url 'user_settings' pk=request.user.pk %}">Settings</a>
+            </div>
+            <div class="option">
+                <img class="option-img" src="/media/site/heart.png" alt="">
+                <a class="option-text" href="{% url 'user_liked' pk=request.user.pk %}">Liked</a>
+            </div>
+            <div class="option">
+                <img class="option-img" src="/media/site/logout.png" alt="">
+                <a class="option-text" href="{% url 'logout' %}">Logout</a>
+            </div>
+            <div class="option">
+                <img class="option-img" src="/media/site/logout.png" alt="">
+                <a class="option-text" href="{% url 'create_quiz' %}">Create quiz</a>
+            </div>
         </div>
-        <div class="option">
-            <img class="option-img" src="/media/site/heart.png" alt="">
-            <a class="option-text" href="{% url 'user_liked' pk=request.user.pk %}">Liked</a>
+    {% else %}
+        <div class="user user-login">
+            <a href="{% url 'login'">Login</a>
+            <a href="{% url 'Sign up'">Sign up</a>
         </div>
-        <div class="option">
-            <img class="option-img" src="/media/site/logout.png" alt="">
-            <a class="option-text" href="{% url 'logout' %}">Logout</a>
-        </div>
-        <div class="option">
-            <img class="option-img" src="/media/site/logout.png" alt="">
-            <a class="option-text" href="{% url 'create_quiz' %}">Create quiz</a>
-        </div>
-    </div>
+    {% endif %}
     <div class="search-bar">
         <form class="search-bar-form" method="GET" action="{% url 'search' %}">
             <input class="form-input" type="text" placeholder="Search quiz" name="q">

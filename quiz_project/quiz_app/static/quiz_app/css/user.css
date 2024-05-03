@@ -1,10 +1,52 @@
-.user-block{
+.userblock{
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
     width: 1100px;
-    height: 400px;
+    height: 300px;
     border-radius: 16px;
     background-color: #fff;
+    gap:50px;
+}
+
+.userblock-info{
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.userblock-right{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.username{
+    font-size: 64px;
+}
+
+.useremail{
+    font-size: 24px;
+}
+
+.user-avatar{
+    width: 260px;
+    height: 260px;
+}
+
+.button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 16px;
+    background-color: #fff;
+}
+
+.userblock-img{
+    width: 100px;
+    height: 100px;
 }

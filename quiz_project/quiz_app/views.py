@@ -81,8 +81,8 @@ def search(request):
 
 
 #quiz
-def quiz_details(request,  pk):
-    quiz = Quiz.objects.get(pk=pk)
+def quiz_details(request,  id):
+    quiz = Quiz.objects.get(id=id)
     context = {'quiz': quiz}
     return render(request, 'quiz_app/quiz/quiz_details.html', context)
 
@@ -101,11 +101,13 @@ def create_quiz(request):
         form = CreateQuiz(request.POST)
         title = request.POST.get('title')
         if form.is_valid():
+            selected_tags = form.cleaned_data['tags']
             quiz = form.save(commit=False)
             quiz.title = title
             quiz.author = request.user
             quiz.created_at = timezone.now()
             quiz.save()
+            quiz.tags.set(selected_tags)
             return redirect('quiz_details', pk=quiz.pk)
     context = {'form': form}
     return render(request, 'quiz_app/quiz/create_quiz.html', context)
@@ -123,7 +125,8 @@ def quiz_wrong(request):
 #user
 def user_page(request, pk):
     user = User.objects.get(pk=pk)
-    user_avatar = UserProfile.objects.get(user=user.pk)
+    # user_avatar = UserProfile.objects.get(user=user.pk)
+    user_avatar = "a"
     context = {'user': user, 'user_avatar': user_avatar}
     return render(request, 'quiz_app/user/user.html', context)
 

@@ -9,17 +9,29 @@
 
 {% block content %}
 
-<div class="user-block">
-    <div class="user-left">
-        {% if user_avatar.avatar %}
-            <img src="{{ user_avatar.avatar.url }}" alt="">
-        {% else %}
-            <img src="/media/site/user_avatar.jpg" alt="">
-        {% endif %}
+<div class="userblock">
+    <div class="userblock-info">
+        <div class="userblock-left">
+            {% if user_avatar.avatar %}
+                <img class="user-avatar" src="{{ user_avatar.avatar.url }}" alt="">
+            {% else %}
+                <img class="user-avatar" src="/media/site/user_avatar.jpg" alt="">
+            {% endif %}
+        </div>
+        <div class="userblock-right">
+            <h2 class="username">{{user.username}}</h2>
+            <h4 class="useremail">{{user.email}}</h4>
+        </div>
     </div>
-    <div class="user-right">
-        <p class="user-name">{{user.username}}</p>
-        <p>{{user.pk}}</p>
+    <div class="userblock-buttons">
+        <div class="userblock-liked button">
+            <img class="userblock-img" src="/media/site/heart.png" alt="">
+        </div>
+        {% if request.user.pk == user.pk %}
+            <div class="userblock-liked button">
+                <img class="userblock-img" src="/media/site/settings.png" alt="">
+            </div>
+        {% endif %}
     </div>
 </div>
 

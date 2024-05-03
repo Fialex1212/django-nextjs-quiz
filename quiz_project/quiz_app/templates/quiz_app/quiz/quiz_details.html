@@ -1,10 +1,23 @@
 {% extends 'quiz_app/base.html' %}
+{% load static %}
 
 {% block title %}{{title}}{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'quiz_app/css/quiz/quiz.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>{{quiz.title}}</h1>
-<a href="{% url 'quiz' quiz_pk=quiz.pk question_pk=1 %}">Take Quiz</a>
+
+<div class="quiz-details">
+    <h1 class="title-quiz">{{quiz.title}}</h1>
+    <div>
+        <p>id: {{quiz.id}}</p>
+        <p>description: {{quiz.description}}</p>
+        <p>author: {{quiz.author}}</p>
+    </div>
+    <a class="take-btn" href="{% url 'quiz' quiz_id=quiz.pk question_id=1 %}">Take Quiz</a>
+</div>
 {% endblock %}
 
 {% block scripts %}

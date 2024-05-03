@@ -10,7 +10,13 @@ class CreateUserForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 
+class CreateUserProfile(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = []
+
+
 class CreateQuiz(forms.ModelForm):
     class Meta:
         model = Quiz
-        fields = ['title']
+        fields = ['title',  'tags']
