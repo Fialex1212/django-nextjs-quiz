@@ -24,9 +24,9 @@
         </div>
     </div>
     <div class="userblock-buttons">
-        <div class="userblock-liked button">
+        <a class="userblock-liked button" href="{% url 'user_liked' pk=user.pk %}">
             <img class="userblock-img" src="/media/site/heart.png" alt="">
-        </div>
+        </a>
         {% if request.user.pk == user.pk %}
             <div class="userblock-liked button">
                 <img class="userblock-img" src="/media/site/settings.png" alt="">

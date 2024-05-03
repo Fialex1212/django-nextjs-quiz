@@ -6,13 +6,18 @@
 
 <div class="quizzes">
     {% for quiz in quizzes %}
-        <a href="{% url 'quiz_details' id=quiz.id %}">
+        <div>
             <div class="quiz">
                 <div class="quiz-rating">
+                    {% if quiz.id in liked_quizzes %}
+                        <button onclick="dislikeQuiz({{quiz.id}})" class="dislikeButton">Dislike</button>
+                    {% else %}
+                        <button onclick="likeQuiz({{ quiz.id }})" class="likeButton">Like</button>
+                    {% endif %}
                     <img src="/media/site/heart.png" alt="heart">
                     <p>2.2k</p>
                 </div>
-                    <h3 class="quiz-title">{{quiz}}</h3>
+                    <a href="{% url 'quiz_details' id=quiz.id %}" class="quiz-title">{{quiz}}</a>
                 <div class="quiz-info">
                     <div class="info-user">
                         <img src="" alt="user_img">
@@ -21,7 +26,7 @@
                     <div class="date">{{quiz.created_at|date:"d F Y"}}</div>
                 </div>
             </div>
-        </a>
+        </div>
     {% endfor %}
 </div>
 

@@ -4,13 +4,13 @@
     align-items: center;
     margin: 0 auto;
     width: 1100px;
-    height: 280px;
+    height: fit-content;
     border-radius: 16px;
     background-color: #fff;
 }
 
 .question-quiz{
-    margin-bottom: 100px;
+    margin-bottom: 5px;
 }
 
 .question-content{
@@ -35,4 +35,10 @@
     align-items: center;
     justify-content: center;
     font-size: 20px;
+}
+
+.adaptive-image {
+    width: 50%; /* Set image width to 100% of the parent div's width */
+    height: 100%; /* Set image height to 100% of the parent div's height */
+    object-fit: cover; /* Ensure the image covers the entire space */
 }

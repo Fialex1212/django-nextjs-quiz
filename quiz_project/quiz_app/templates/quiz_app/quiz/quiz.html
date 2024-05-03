@@ -11,6 +11,9 @@
 
 <div class="question">
     <h2 class="question-quiz">{{quiz.title}}</h2>
+    {% if question.content_image %}
+        <img src="{{question.content_image.url}}" alt="{{question}}" class="adaptive-image">
+    {% endif %}
     <p class="question-content">{{ question }}</p>
 </div>
 <br><br>

@@ -23,10 +23,6 @@
         </a>
         <div class="user-options">
             <div class="option">
-                <img class="option-img" src="/media/site/settings.png" alt="">
-                <a class="option-text" href="{% url 'user_settings' pk=request.user.pk %}">Settings</a>
-            </div>
-            <div class="option">
                 <img class="option-img" src="/media/site/heart.png" alt="">
                 <a class="option-text" href="{% url 'user_liked' pk=request.user.pk %}">Liked</a>
             </div>
@@ -41,8 +37,8 @@
         </div>
     {% else %}
         <div class="user user-login">
-            <a href="{% url 'login'">Login</a>
-            <a href="{% url 'Sign up'">Sign up</a>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'sign_up' %}">Sign up</a>
         </div>
     {% endif %}
     <div class="search-bar">
@@ -60,5 +56,61 @@
 {% block scripts %}
 
 {% endblock %}
+<script>
+function likeQuiz(quizId) {
+    fetch(`/quiz_like/${quizId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin' // Include cookies in the request
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        // Handle the response as needed
+        console.log('Quiz liked successfully');
+        // Optionally, you can reload the page or update the UI
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Handle errors, e.g., display an error message
+    });
+}
+
+function dislikeQuiz(quizId) {
+    fetch(`/quiz_dislike/${quizId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin' // Include cookies in the request
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        // Change the button appearance to "like"
+        const button = const buttons = document.querySelectorAll('.likeButton');
+        if (button) {
+            button.textContent = 'Like';
+            button.setAttribute('onclick', `likeQuiz(${quizId})`);
+            // Optionally, you can update other UI elements as needed
+            console.log('Quiz disliked successfully');
+        } else {
+            console.error(`Button element with ID "likeButton${quizId}" not found`);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Handle errors, e.g., display an error message
+    });
+}
+
+</script>
+
 </body>
 </html>

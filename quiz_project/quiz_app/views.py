@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.utils import timezone
+from django.http import JsonResponse
 from .forms import *
 from .models import *
 import time
@@ -28,8 +29,14 @@ def sign_up_page(request):
                 user.email = email
                 user.set_password(password1)
                 user.save()
-                messages.success(request, 'Account was successful created' + username)
+                messages.success(request, 'Account was successfully created' + username)
+
                 return redirect('login')
+            else:
+                if password1 != password2:
+                    messages.error(request, 'Different passwords')
+                else:
+                    messages.error(request, 'Some input is wrong')
     context = {'form': form}
     return render(request, 'quiz_app/login__sign_up/sign_up.html', context)
 
@@ -44,7 +51,7 @@ def login_page(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, 'User successful login')
+                messages.success(request, 'You have successfully logged!')
                 return redirect('home')
             else:
                 messages.error(request, 'Username or password incorrect')
@@ -54,7 +61,7 @@ def login_page(request):
 
 def logout_page(request):
     logout(request)
-    messages.success(request, 'You was successful logout')
+    messages.success(request, 'You have successfully logged out!')
     return redirect('login')
 
 
@@ -65,7 +72,8 @@ def preloader(request):
 
 def home(request):
     quizzes = Quiz.objects.all()
-    context = {"title": 'home', 'quizzes': quizzes}
+    liked_quizzes = set(LikeQuiz.objects.filter(user__id=request.user.pk).values_list('quiz_id', flat=True))
+    context = {"title": 'home', 'quizzes': quizzes, 'liked_quizzes': liked_quizzes}
     return render(request, 'quiz_app/main/home.html', context)
 
 
@@ -93,6 +101,21 @@ def quiz(request, quiz_id, question_id):
     next_question = Question.objects.filter(quiz__id=quiz_id, id__gt=question_id).order_by('id').first()
     context = {'quiz': quiz, 'question': question, 'next_question': next_question}
     return render(request, 'quiz_app/quiz/quiz.html', context)
+
+
+def quiz_like(request, quiz_id):
+    user = request.user
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    like, created = LikeQuiz.objects.get_or_create(user=user, quiz=quiz)
+    if created:
+        return JsonResponse({'status': 'success'})
+
+
+def quiz_dislike(request, quiz_id):
+    user = request.user
+    like = get_object_or_404(LikeQuiz, user=user, quiz_id=quiz_id)
+    like.delete()
+    return JsonResponse({'status': 'success'})
 
 
 def create_quiz(request):
@@ -131,15 +154,10 @@ def user_page(request, pk):
     return render(request, 'quiz_app/user/user.html', context)
 
 
-def user_settings(request, pk):
-    user = User.objects.get(pk=pk)
-    context = {'user': user}
-    return render(request, 'quiz_app/user/settings.html', context)
-
-
 def user_liked(request, pk):
     user = User.objects.get(pk=pk)
-    context = {'user': user}
+    liked = LikeQuiz.objects.filter(user__id=pk).select_related('quiz')
+    context = {'user': user, 'liked': liked}
     return render(request, 'quiz_app/user/liked.html', context)
 
 

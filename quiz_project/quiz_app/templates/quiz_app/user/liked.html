@@ -1,12 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<img src="" alt="">
-<p>{{user.username}}</p>
-<p>{{user.email}}</p>
-</body>
-</html>
+{% extends 'quiz_app/base.html' %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'quiz_app/css/user.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="userblock">
+    <div class="userblock-info">
+        <div class="userblock-left">
+            {% if user_avatar.avatar %}
+                <img class="user-avatar" src="{{ user_avatar.avatar.url }}" alt="">
+            {% else %}
+                <img class="user-avatar" src="/media/site/user_avatar.jpg" alt="">
+            {% endif %}
+        </div>
+        <div class="userblock-right">
+            <h2 class="username">{{user.username}}</h2>
+            <h4 class="useremail">{{user.email}}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="user-quizzes">
+    {% for liked_quiz in liked %}
+        <div href="{% url 'quiz_details' id=liked_quiz.quiz.id %}">
+            <div class="quiz">
+                <div class="quiz-rating">
+                    <img src="/media/site/heart.png" alt="heart">
+                    <p>2.2k</p>
+                </div>
+                    <a class="quiz-title" href="{% url 'quiz_details' id=liked_quiz.quiz.id %}">
+                        {{liked_quiz.quiz.title}}
+                    </a>
+                <div class="quiz-info">
+                    <div class="info-user">
+                        <img src="" alt="user_img">
+                        <p>{{liked_quiz.quiz.author}}</p>
+                    </div>
+                    <div class="date">{{liked_quiz.quiz.created_at|date:"d F Y"}}</div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
