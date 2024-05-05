@@ -7,10 +7,13 @@
 7. Ratting system
 8. Login/Sign in pages +
 9. Like system
-10. Take test
-11. Quiz tags and description
+10. Take test +
+11. Quiz tags and description 
 12. Searching by tags
 13. Error and success messages +
+14. Create base page for quiz
+15. Stopwatch
+16. Level of quiz
 
 
 git add .
