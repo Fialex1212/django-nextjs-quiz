@@ -19,6 +19,10 @@ margin-top: 100px;
     box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.25) ;
 }
 
+.create-quiz-input{
+    margin-top: 60px !important;
+}
+
 .quiz-input::placeholder,
 .quiz-input{
     font-size: 20px;

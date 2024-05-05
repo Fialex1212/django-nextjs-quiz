@@ -17,7 +17,7 @@
             {% if request.user.userprofile.avatar %}
                 <img src="{{request.user.userprofile.avatar.url}}" alt="" class="user-img">
             {% else %}
-                <img src="" alt="" class="user-img">
+                <img src="/media/site/user_avatar.jpg" alt="" class="user-img">
             {% endif %}
             <p class="user-name">{{request.user.username}}</p>
         </a>
@@ -56,8 +56,9 @@
 {% block scripts %}
 
 {% endblock %}
+
 <script>
-function likeQuiz(quizId) {
+    function likeQuiz(quizId) {
     fetch(`/quiz_like/${quizId}/`, {
         method: 'POST',
         headers: {
@@ -93,23 +94,15 @@ function dislikeQuiz(quizId) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        // Change the button appearance to "like"
-        const button = const buttons = document.querySelectorAll('.likeButton');
-        if (button) {
-            button.textContent = 'Like';
-            button.setAttribute('onclick', `likeQuiz(${quizId})`);
-            // Optionally, you can update other UI elements as needed
-            console.log('Quiz disliked successfully');
-        } else {
-            console.error(`Button element with ID "likeButton${quizId}" not found`);
-        }
+        // Handle the response as needed
+        console.log('Quiz disliked successfully');
+        // Optionally, you can reload the page or update the UI
     })
     .catch(error => {
         console.error('Error:', error);
         // Handle errors, e.g., display an error message
     });
 }
-
 </script>
 
 </body>

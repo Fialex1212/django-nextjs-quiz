@@ -136,7 +136,7 @@ body{
     justify-content: center;
 }
 
-.quizzes>a{
+.quizzes>div{
     display: flex;
     align-items: center;
     justify-content: center;

@@ -91,7 +91,8 @@ def search(request):
 #quiz
 def quiz_details(request,  id):
     quiz = Quiz.objects.get(id=id)
-    context = {'quiz': quiz}
+    question = Question.objects.filter(quiz=quiz).first()
+    context = {'quiz': quiz, 'question': question}
     return render(request, 'quiz_app/quiz/quiz_details.html', context)
 
 
@@ -119,19 +120,27 @@ def quiz_dislike(request, quiz_id):
 
 
 def create_quiz(request):
-    form = CreateQuiz()
+    form = CreateQuiz(request.POST or None)
     if request.method == "POST":
-        form = CreateQuiz(request.POST)
-        title = request.POST.get('title')
         if form.is_valid():
-            selected_tags = form.cleaned_data['tags']
+            title = form.cleaned_data['title']
+            tags_input = form.cleaned_data['tags']
+            selected_tags = []
+
+            if tags_input:
+                tag_names = [name.strip() for name in tags_input.split(',')]
+
+                for tag_name in tag_names:
+                    tag, created = Tag.objects.get_or_create(content=tag_name)
+                    selected_tags.append(tag)
+
             quiz = form.save(commit=False)
             quiz.title = title
             quiz.author = request.user
             quiz.created_at = timezone.now()
             quiz.save()
             quiz.tags.set(selected_tags)
-            return redirect('quiz_details', pk=quiz.pk)
+            return redirect('quiz_details', id=quiz.id)
     context = {'form': form}
     return render(request, 'quiz_app/quiz/create_quiz.html', context)
 

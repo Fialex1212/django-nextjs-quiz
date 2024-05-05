@@ -17,6 +17,9 @@ class CreateUserProfile(forms.ModelForm):
 
 
 class CreateQuiz(forms.ModelForm):
+    tags = forms.CharField(required=False)
     class Meta:
         model = Quiz
         fields = ['title',  'tags']
+
+

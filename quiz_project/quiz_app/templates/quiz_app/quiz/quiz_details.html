@@ -15,11 +15,47 @@
         <p>id: {{quiz.id}}</p>
         <p>description: {{quiz.description}}</p>
         <p>author: {{quiz.author}}</p>
+        <ul>
+            <p>Tags:</p>
+            {% for tag in quiz.tags.all %}
+                <li>{{tag}}</li>
+            {% endfor %}
+        </ul>
     </div>
-    <a class="take-btn" href="{% url 'quiz' quiz_id=quiz.pk question_id=1 %}">Take Quiz</a>
+    {% if request.user.pk == quiz.author.pk %}
+        <a href="">Change quiz</a>
+    {% endif %}
+    <a class="take-btn" href="{% url 'quiz' quiz_id=quiz.pk question_id=question.id %}">Take Quiz</a>
+    <a href="" id="copyButton" class="take-btn">Copy Link</a>
 </div>
 {% endblock %}
 
 {% block scripts %}
+
+<script>
+document.getElementById('copyButton').addEventListener('click', function() {
+    // Get the current page's URL
+    var currentUrl = window.location.href;
+
+    // Create a temporary input element
+    var tempInput = document.createElement('input');
+    tempInput.setAttribute('value', currentUrl);
+    document.body.appendChild(tempInput);
+
+    // Select the URL in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the selected URL
+    document.execCommand('copy');
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+
+    // Alert the user that the link has been copied
+    alert('Link copied to clipboard: ' + currentUrl);
+});
+</script>
+
 
 {% endblock %}
