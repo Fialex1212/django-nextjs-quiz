@@ -22,16 +22,16 @@
             <h2 class="username">{{user.username}}</h2>
             <h4 class="useremail">{{user.email}}</h4>
         </div>
-    </div>
-    <div class="userblock-buttons">
-        <a class="userblock-liked button" href="{% url 'user_liked' pk=user.pk %}">
-            <img class="userblock-img" src="/media/site/heart.png" alt="">
-        </a>
-        {% if request.user.pk == user.pk %}
-            <div class="userblock-liked button" onclick="showOptionBlock()">
-                <img class="userblock-img" src="/media/site/settings.png" alt="">
-            </div>
-        {% endif %}
+        <div class="userblock-buttons">
+            <a class="userblock-liked button" href="{% url 'user_liked' pk=user.pk %}">
+                <img class="userblock-img" src="/media/site/heart.png" alt="">
+            </a>
+            {% if request.user.pk == user.pk %}
+                <div class="userblock-liked button" onclick="showOptionBlock()">
+                    <img class="userblock-img" src="/media/site/settings.png" alt="">
+                </div>
+            {% endif %}
+        </div>
     </div>
 </div>
 
@@ -50,11 +50,36 @@
 </div>
 
 <div class="user-quizzes">
-
+    {% for quiz in users_quizzes %}
+        <div>
+            <div class="quiz">
+                <div class="quiz-rating">
+                    {% if quiz.id in liked_quizzes %}
+                        <a onclick="dislikeQuiz({{ quiz.id }})"><img src="/media/site/heart_full.svg" alt="heart"></a>
+                    {% else %}
+                        <a onclick="likeQuiz({{ quiz.id }})"><img src="/media/site/heart_empty.svg" alt="heart"></a>
+                    {% endif %}
+                </div>
+                    <a class="my-quiz quiz-title" href="{% url 'quiz_change' quiz_id=quiz.id %}">{{quiz.title}}</a>
+                <div class="quiz-info">
+                    <div class="info-user">
+                        {% if quiz.author.user_avatar.avatar %}
+                            <img class="user-avatar" src="{{ user_avatar.avatar.url }}" alt="">
+                        {% else %}
+                            <img class="user-avatar" src="/media/site/user_avatar.jpg" alt="">
+                        {% endif %}
+                        <p>{{quiz.author}}</p>
+                    </div>
+                    <div class="date">{{quiz.created_at|date:"d F Y"}}</div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>
 
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'quiz_app/js/user.js' %}"></script>
+<script src="{% static 'quiz_app/js/like_dislike.js' %}"></script>
 
 {% endblock %}

@@ -19,17 +19,21 @@ body{
     min-height: 100dvh;
 }
 
+.quiz-base{
+    padding-top: 1% !important;
+    padding-bottom: 0% !important;
+}
+
 /* user start */
 
 .user{
-    width: 220px;
+    width: fit-content;
     height: 60px;
     background-color: #fff;
     border-radius: 16px;
     position: fixed;
     display: flex;
     align-items: center;
-    column-gap: 20px;
     top: 40px;
     right: 60px;
 }
@@ -47,6 +51,7 @@ body{
 }
 
 .user-name{
+    margin: 0 40px 0 20px;
     font-size: 24px;
 }
 

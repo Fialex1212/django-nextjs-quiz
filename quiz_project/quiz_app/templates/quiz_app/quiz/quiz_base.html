@@ -53,12 +53,7 @@
             <a href="{% url 'sign_up' %}">Sign up</a>
         </div>
     {% endif %}
-    <div class="search-bar">
-        <form class="search-bar-form" method="GET" action="{% url 'search' %}">
-            <input class="form-input" type="text" placeholder="Search quiz" name="q">
-        </form>
-    </div>
-    <div class="container">
+    <div class="container quiz-base">
         {% block content %}
 
         {% endblock %}

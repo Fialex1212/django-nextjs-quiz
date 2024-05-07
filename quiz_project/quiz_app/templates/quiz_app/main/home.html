@@ -3,6 +3,10 @@
 
 {% block title %}{{title}}{% endblock %}
 
+{% block styles %}
+<link rel="icon" href="/media/site/home.svg">
+{% endblock %}
+
 {% block content %}
 
 <div class="quizzes">
@@ -15,7 +19,6 @@
                     {% else %}
                         <a onclick="likeQuiz({{ quiz.id }})"><img src="/media/site/heart_empty.svg" alt="heart"></a>
                     {% endif %}
-                    <p>2.2k</p>
                 </div>
                     <a href="{% url 'quiz_details' id=quiz.id %}" class="quiz-title">{{quiz}}</a>
                 <div class="quiz-info">

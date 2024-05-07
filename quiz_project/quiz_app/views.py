@@ -145,6 +145,16 @@ def create_quiz(request):
     return render(request, 'quiz_app/quiz/create_quiz.html', context)
 
 
+def quiz_change(request, quiz_id):
+    if request.method == "POST":
+        new_title = request.POST.get('title')
+        quiz = Quiz.objects.get(id=quiz_id)
+        quiz.title = new_title
+        quiz.save()
+        return redirect('home')
+    return render(request, 'quiz_app/quiz/quiz_change.html')
+
+
 def quiz_result(request):
     context = {}
     return render(request, 'quiz_app/quiz/quiz_result', context)
@@ -159,14 +169,17 @@ def user_page(request, pk):
     user = User.objects.get(pk=pk)
     # user_avatar = UserProfile.objects.get(user=user.pk)
     user_avatar = "a"
-    context = {'user': user, 'user_avatar': user_avatar}
+    users_quizzes = Quiz.objects.filter(author=user)
+    liked_quizzes = set(LikeQuiz.objects.filter(user__id=request.user.pk).values_list('quiz_id', flat=True))
+    context = {'user': user, 'user_avatar': user_avatar, 'users_quizzes': users_quizzes, 'liked_quizzes': liked_quizzes}
     return render(request, 'quiz_app/user/user.html', context)
 
 
 def user_liked(request, pk):
     user = User.objects.get(pk=pk)
     liked = LikeQuiz.objects.filter(user__id=pk).select_related('quiz')
-    context = {'user': user, 'liked': liked}
+    liked_quizzes = set(LikeQuiz.objects.filter(user__id=request.user.pk).values_list('quiz_id', flat=True))
+    context = {'user': user, 'liked': liked, 'liked_quizzes': liked_quizzes}
     return render(request, 'quiz_app/user/liked.html', context)
 
 

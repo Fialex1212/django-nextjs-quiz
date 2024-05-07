@@ -1,19 +1,22 @@
 1. User settings(change username, email, password, avatar)
-2. User profile 
+2. User profile + 
 3. Create a quiz +
-4. Change a quiz
+4. Change a quiz +
 5. Use images as answer +
 6. Search quiz +
-7. Ratting system
+7. Ratting system +
 8. Login/Sign in pages +
-9. Like system
+9. Like system +
 10. Take test +
-11. Quiz tags and description 
-12. Searching by tags
+11. Quiz tags and description +
+12. Searching by tags 
 13. Error and success messages +
-14. Create base page for quiz
+14. Create base page for quiz +
 15. Stopwatch
-16. Level of quiz
+16. Difficulty of quiz +
+17. Create question for quiz 
+18. Create answers for question
+19. Can change two previous options
 
 
 git add .

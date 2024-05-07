@@ -19,6 +19,7 @@ urlpatterns = [
     path('quiz_result/<int:id>/ ', quiz_result, name='quiz_result'),
     path('quiz_like/<int:quiz_id>/', quiz_like, name='quiz_like'),
     path('quiz_dislike/<int:quiz_id>/', quiz_dislike, name='quiz_dislike'),
+    path("quiz_change/<int:quiz_id>", quiz_change, name="quiz_change"),
 
     #user
     path('user/<int:pk>/', user_page, name='user'),

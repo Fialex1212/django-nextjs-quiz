@@ -5,6 +5,8 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'quiz_app/css/user.css' %}">
+<link rel="icon" href="/media/site/add-button.svg">
+<title>{{request.user.username}}'s likes</title>
 {% endblock %}
 
 {% block content %}
@@ -26,22 +28,29 @@
 </div>
 
 <div class="user-quizzes">
-    {% for liked_quiz in liked %}
-        <div href="{% url 'quiz_details' id=liked_quiz.quiz.id %}">
+    {% for quiz in liked %}
+        <div href="{% url 'quiz_details' id=quiz.quiz.id %}">
             <div class="quiz">
                 <div class="quiz-rating">
-                    <img src="/media/site/heart.png" alt="heart">
-                    <p>2.2k</p>
+                    {% if quiz.quiz.id in liked_quizzes %}
+                        <a onclick="dislikeQuiz({{ quiz.quiz.id }})"><img src="/media/site/heart_full.svg" alt="heart"></a>
+                    {% else %}
+                        <a onclick="likeQuiz({{ quiz.quiz.id }})"><img src="/media/site/heart_empty.svg" alt="heart"></a>
+                    {% endif %}
                 </div>
-                    <a class="quiz-title" href="{% url 'quiz_details' id=liked_quiz.quiz.id %}">
-                        {{liked_quiz.quiz.title}}
+                    <a class="quiz-title" href="{% url 'quiz_details' id=quiz.quiz.id %}">
+                        {{quiz.quiz.title}}
                     </a>
                 <div class="quiz-info">
                     <div class="info-user">
-                        <img src="" alt="user_img">
-                        <p>{{liked_quiz.quiz.author}}</p>
+                        {% if quiz.quiz.author.user_avatar.avatar %}
+                            <img class="user-avatar" src="{{ quiz.user_avatar.avatar.url }}" alt="">
+                        {% else %}
+                            <img class="user-avatar" src="/media/site/user_avatar.jpg" alt="">
+                        {% endif %}
+                        <p>{{quiz.quiz.author}}</p>
                     </div>
-                    <div class="date">{{liked_quiz.quiz.created_at|date:"d F Y"}}</div>
+                    <div class="date">{{quiz.quiz.created_at|date:"d F Y"}}</div>
                 </div>
             </div>
         </div>

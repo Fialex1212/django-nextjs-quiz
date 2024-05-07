@@ -2,22 +2,23 @@ function likeQuiz(quizId) {
     fetch(`/quiz_like/${quizId}/`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+            'X-CSRFToken': '{{ csrf_token }}',
             'Content-Type': 'application/json'
         },
-        credentials: 'same-origin' // Include cookies in the request
+        credentials: 'same-origin'
     })
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        // Handle the response as needed
+        // Update liked_quizzes data
+        liked_quizzes.push(quizId);
+        // Update UI to reflect the like action
+        document.getElementById(`like_button_${quizId}`).src = "/media/site/heart_full.svg";
         console.log('Quiz liked successfully');
-        // Optionally, you can reload the page or update the UI
     })
     .catch(error => {
         console.error('Error:', error);
-        // Handle errors, e.g., display an error message
     });
 }
 
@@ -25,21 +26,22 @@ function dislikeQuiz(quizId) {
     fetch(`/quiz_dislike/${quizId}/`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+            'X-CSRFToken': '{{ csrf_token }}',
             'Content-Type': 'application/json'
         },
-        credentials: 'same-origin' // Include cookies in the request
+        credentials: 'same-origin'
     })
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        // Handle the response as needed
+        // Remove quizId from liked_quizzes data
+        liked_quizzes = liked_quizzes.filter(id => id !== quizId);
+        // Update UI to reflect the dislike action
+        document.getElementById(`like_button_${quizId}`).src = "/media/site/heart_empty.svg";
         console.log('Quiz disliked successfully');
-        // Optionally, you can reload the page or update the UI
     })
     .catch(error => {
         console.error('Error:', error);
-        // Handle errors, e.g., display an error message
     });
 }

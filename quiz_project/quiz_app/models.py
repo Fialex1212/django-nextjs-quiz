@@ -16,12 +16,22 @@ class Tag(models.Model):
 
 
 class Quiz(models.Model):
+    DIFFICULTY_CHOICES = (
+        ('Easy', 'Easy'),
+        ('Moderately Easy', 'Moderately Easy'),
+        ('Intermediate', 'Intermediate'),
+        ('Moderately Hard', 'Moderately Hard'),
+        ('Hard', 'Hard'),
+    )
+
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     description = models.TextField(default='description')
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    difficulty = models.IntegerField(choices=DIFFICULTY_CHOICES, default='Easy')
     created_at = models.DateTimeField(default=date.today, editable=False)
     tags = models.ManyToManyField(Tag)
+    is_public = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "Quizzes"
