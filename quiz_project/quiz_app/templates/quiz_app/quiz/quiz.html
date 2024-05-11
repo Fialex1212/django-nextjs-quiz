@@ -16,7 +16,7 @@
     {% endif %}
     <p class="question-content">{{ question }}</p>
 </div>
-<br><br>
+<br><p class="stopwatch" id="stopwatch">360</p><br>
 <form action="" method="POST">
     <div class="answers">
         {% for answer in question.answer_set.all %}
@@ -34,7 +34,7 @@
 </form>
 
 {% endblock %}
-
 {% block scripts %}
+<script src="{% static 'quiz_app/js/stopwatch.js' %}"></script>
 
 {% endblock %}

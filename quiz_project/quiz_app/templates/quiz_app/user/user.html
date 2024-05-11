@@ -55,9 +55,9 @@
             <div class="quiz">
                 <div class="quiz-rating">
                     {% if quiz.id in liked_quizzes %}
-                        <a onclick="dislikeQuiz({{ quiz.id }})"><img src="/media/site/heart_full.svg" alt="heart"></a>
+                        <a onclick="dislikeQuiz({{ quiz.id }}, '{{ quiz.title }}')"><img src="/media/site/heart_full.svg" alt="heart"></a>
                     {% else %}
-                        <a onclick="likeQuiz({{ quiz.id }})"><img src="/media/site/heart_empty.svg" alt="heart"></a>
+                        <a onclick="likeQuiz({{ quiz.id }}, )"><img src="/media/site/heart_empty.svg" alt="heart"></a>
                     {% endif %}
                 </div>
                     <a class="my-quiz quiz-title" href="{% url 'quiz_change' quiz_id=quiz.id %}">{{quiz.title}}</a>

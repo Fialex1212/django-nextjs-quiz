@@ -1,0 +1,48 @@
+{% extends 'quiz_app/base.html' %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'quiz_app/css/quiz/quiz.css' %}">
+{% endblock %}
+
+{% block content %}
+<form class="form" action="" method="POST">
+    {% csrf_token %}
+    <input class="quiz-input create-quiz-input" type="text" name="question" placeholder="*Question">
+    <div>
+        <input class="quiz-input create-quiz-input" type="text" name="answer_1" placeholder="*Answer 1">
+        <p>correct</p>
+        <input type="checkbox" name="correct_1">
+    </div>
+    <div>
+        <input class="quiz-input create-quiz-input" type="text" name="answer_2" placeholder="*Answer 2">
+        <p>correct</p>
+        <input type="checkbox" name="correct_2">
+    </div>
+    <div>
+        <input class="quiz-input create-quiz-input" type="text" name="answer_3" placeholder="*Answer 3">
+        <p>correct</p>
+        <input type="checkbox" name="correct_3">
+    </div>
+    <div>
+        <input class="quiz-input create-quiz-input" type="text" name="answer_4" placeholder="*Answer 4">
+        <p>correct</p>
+        <input type="checkbox" name="correct_4">
+    </div>
+    <button class="quiz-btn" type="submit">Create</button>
+</form>
+{% if form.errors %}
+    <ul>
+    {% for field in form %}
+        {% for error in field.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

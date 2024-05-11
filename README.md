@@ -12,7 +12,7 @@
 12. Searching by tags 
 13. Error and success messages +
 14. Create base page for quiz +
-15. Stopwatch
+15. Stopwatch +
 16. Difficulty of quiz +
 17. Create question for quiz 
 18. Create answers for question

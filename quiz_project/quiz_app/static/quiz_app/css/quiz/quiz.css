@@ -4,7 +4,7 @@
     align-items: center;
     margin: 0 auto;
     width: 500px;
-    height: 400px;
+    height: fit-content;
     border-radius: 16px;
     background-color: #fff;
 }

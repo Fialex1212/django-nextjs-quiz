@@ -23,3 +23,9 @@ class CreateQuiz(forms.ModelForm):
         fields = ['title',  'tags']
 
 
+class CreateQuestion(forms.ModelForm):
+    class Meta:
+        models = Question
+        fields = ['Question', 'answer_1', 'answer_2', 'answer_3', 'answer_4']
+
+

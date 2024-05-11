@@ -155,6 +155,18 @@ def quiz_change(request, quiz_id):
     return render(request, 'quiz_app/quiz/quiz_change.html')
 
 
+def quiz_add_question(request, quiz_id):
+    form = CreateQuestion(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            question = request.POST.get("question")
+            answer_1 = request.POST.get("answer_1")
+            answer_2 = request.POST.get("answer_2")
+            answer_3 = request.POST.get("answer_3")
+            answer_4 = request.POST.get("answer_4")
+
+
+
 def quiz_result(request):
     context = {}
     return render(request, 'quiz_app/quiz/quiz_result', context)
@@ -179,7 +191,7 @@ def user_liked(request, pk):
     user = User.objects.get(pk=pk)
     liked = LikeQuiz.objects.filter(user__id=pk).select_related('quiz')
     liked_quizzes = set(LikeQuiz.objects.filter(user__id=request.user.pk).values_list('quiz_id', flat=True))
-    context = {'user': user, 'liked': liked, 'liked_quizzes': liked_quizzes}
+    context = {'user': user, 'liked': liked, 'liked_quizzes': liked_quizzes}    
     return render(request, 'quiz_app/user/liked.html', context)
 
 
