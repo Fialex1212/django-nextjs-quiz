@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
@@ -59,6 +61,7 @@ def login_page(request):
     return render(request, 'quiz_app/login__sign_up/login.html')
 
 
+@login_required()
 def logout_page(request):
     logout(request)
     messages.success(request, 'You have successfully logged out!')
@@ -104,6 +107,7 @@ def quiz(request, quiz_id, question_id):
     return render(request, 'quiz_app/quiz/quiz.html', context)
 
 
+@login_required(login_url='login')
 def quiz_like(request, quiz_id):
     user = request.user
     quiz = get_object_or_404(Quiz, id=quiz_id)
@@ -112,6 +116,7 @@ def quiz_like(request, quiz_id):
         return JsonResponse({'status': 'success'})
 
 
+@login_required(login_url='login')
 def quiz_dislike(request, quiz_id):
     user = request.user
     like = get_object_or_404(LikeQuiz, user=user, quiz_id=quiz_id)
@@ -119,8 +124,9 @@ def quiz_dislike(request, quiz_id):
     return JsonResponse({'status': 'success'})
 
 
+@login_required(login_url='login')
 def create_quiz(request):
-    form = CreateQuiz(request.POST or None)
+    form = CreateQuizForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             title = form.cleaned_data['title']
@@ -141,39 +147,107 @@ def create_quiz(request):
             quiz.save()
             quiz.tags.set(selected_tags)
             return redirect('quiz_details', id=quiz.id)
+        else:
+            print(form.errors)
     context = {'form': form}
-    return render(request, 'quiz_app/quiz/create_quiz.html', context)
+    return render(request, 'quiz_app/quiz/create/create_quiz.html', context)
 
 
+@login_required(login_url='login')
 def quiz_change(request, quiz_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    questions = Question.objects.filter(quiz=quiz)
     if request.method == "POST":
         new_title = request.POST.get('title')
-        quiz = Quiz.objects.get(id=quiz_id)
         quiz.title = new_title
         quiz.save()
         return redirect('home')
-    return render(request, 'quiz_app/quiz/quiz_change.html')
+    context = {'quiz': quiz, 'questions': questions}
+    return render(request, 'quiz_app/quiz/quiz_change.html', context)
 
 
-def quiz_add_question(request, quiz_id):
-    form = CreateQuestion(request.POST or None)
+@login_required(login_url='login')
+def quiz_change_question(request, quiz_id, question_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    question = get_object_or_404(Question, pk=question_id)
+    answers = Answer.objects.filter(question=question)
+    form_question = CreateQuestionForm(request.POST or None, request.FILES or None, instance=question)
+    form_answer = CreateAnswerForm(request.POST or None, request.FILES or None)
     if request.method == "POST":
-        if form.is_valid():
-            question = request.POST.get("question")
-            answer_1 = request.POST.get("answer_1")
-            answer_2 = request.POST.get("answer_2")
-            answer_3 = request.POST.get("answer_3")
-            answer_4 = request.POST.get("answer_4")
+        if request.POST.get('from-question') == "update_question":
+            form_question = CreateQuestionForm(request.POST, request.FILES)
+            if form_question.is_valid():
+                question = form_question.save(commit=False)
+                question.quiz = quiz
+                question.content = form_question.cleaned_data['content']
+                if 'content_image' in request.FILES:
+                    question.content_image = request.FILES['content_image']
+                question.save()
+        elif request.POST.get('form-answer') == "update_answer":
+            form_answer = CreateAnswerForm(request.POST, request.FILES)
+            if form_answer.is_valid():
+                answer = form_answer.save(commit=False)
+                answer.question = question
+                if 'content_image' in request.FILES:
+                    answer.content_image = request.FILES['content_image']
+                elif 'is_correct' in request.FILES:
+                    answer.is_correct = request.FILES['is_correct']
+                answer.save()
+    context = {'quiz': quiz, 'question': question, 'answers': answers, 'form_question': form_question, 'form_answer': form_answer}
+    return render(request, 'quiz_app/quiz/quiz_change_question.html', context)
 
+@login_required(login_url='login')
+def quiz_add_question(request, quiz_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    if request.method == "POST":
+        form = CreateQuestionForm(request.POST, request.FILES)
+        if form.is_valid():
+            print("Form is valid")
+            question = form.save(commit=False)
+            question.quiz = quiz
+            question.content = form.cleaned_data['content']
+            if 'content_image' in request.FILES:
+                question.content_image = request.FILES['content_image']
+            question.save()
+            return redirect('quiz_add_answer', quiz_id=quiz.id, question_id=question.id)
+        else:
+            print("Form is invalid")
+            print(form.errors)
+            print("POST data:", request.POST)
+    else:
+        form = CreateQuestionForm()
+        form = CreateQuestionForm()
+    context = {'quiz': quiz, 'question_form': form}
+    return render(request, 'quiz_app/quiz/create/quiz_add_question.html', context)
+
+
+def quiz_add_answer(request, quiz_id, question_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    question = get_object_or_404(Question, pk=question_id)
+    if request.method == "POST":
+        form = CreateAnswerForm(request.POST, request.FILES)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.question = question
+            if 'content_image' in request.FILES:
+                answer.content_image = request.FILES['content_image']
+            elif 'is_correct' in request.FILES:
+                answer.is_correct = request.FILES['is_correct']
+            answer.save()
+            return redirect('quiz_change', quiz_id=quiz.id)
+        else:
+            print("Form erros")
+            print(form.errors)
+            print("POST data:", request.POST)
+    else:
+        form = CreateAnswerForm()
+    context = {'quiz': quiz, 'answer_form': form}
+    return render(request, 'quiz_app/quiz/create/quiz_add_answer.html', context)
 
 
 def quiz_result(request):
     context = {}
     return render(request, 'quiz_app/quiz/quiz_result', context)
-
-
-def quiz_wrong(request):
-    return render(request, 'quiz_app/quiz/quiz_result')
 
 
 #user
@@ -187,12 +261,72 @@ def user_page(request, pk):
     return render(request, 'quiz_app/user/user.html', context)
 
 
+@login_required(login_url='login')
 def user_liked(request, pk):
     user = User.objects.get(pk=pk)
     liked = LikeQuiz.objects.filter(user__id=pk).select_related('quiz')
     liked_quizzes = set(LikeQuiz.objects.filter(user__id=request.user.pk).values_list('quiz_id', flat=True))
     context = {'user': user, 'liked': liked, 'liked_quizzes': liked_quizzes}    
     return render(request, 'quiz_app/user/liked.html', context)
+
+
+@login_required(login_url='login')
+def user_change_username(request, pk):
+    user = get_object_or_404(User, pk=pk)
+
+    if request.method == "POST":
+        new_username = request.POST.get("new-username")
+        password = request.POST.get("password")
+        names = User.objects.all()
+        
+        if check_password(password, user.password):
+            user.username = new_username
+            user.save()
+            messages.success(request,   f"Username was successful changed to {new_username}")
+        else:
+            messages.error(request, "Incorect password")
+    return redirect("user", pk=pk)
+
+
+@login_required(login_url='login')
+def user_change_email(request, pk):
+    user = get_object_or_404(User, pk=pk)
+
+    if request.method == "POST":
+        new_email = request.POST.get('new-email')
+        password = request.POST.get('password')
+
+        if check_password(password, user.password):
+            user.email = new_email
+            user.save()
+            messages.success(request, f"Email of {user.username} was successful changed to {new_email}")
+        else:
+            messages.error(request, "Incorect password or email")
+
+    return redirect("user", pk=pk)
+
+
+@login_required(login_url='login')
+def user_change_passwrod(request, pk):
+    user = get_object_or_404(User, pk=pk)
+
+    if request.method == "POST":
+        new_password = request.POST.get('new-password')
+        new_password_repeated = request.POST.get('new-password-repeated')
+        password = request.POST.get('password')
+        if new_password == new_password_repeated:
+            if check_password(password, user.password):
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, f"Passwrod of {user.username } was successful changed")
+            else:
+                messages.error(request, "Incorect old password or new password")
+        else:
+            messages.error(request, "Password isn't same")
+
+    return redirect("user", pk=pk)
+
+
 
 
 

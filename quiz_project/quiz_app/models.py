@@ -28,7 +28,7 @@ class Quiz(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(default='description')
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    difficulty = models.IntegerField(choices=DIFFICULTY_CHOICES, default='Easy')
+    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES, default='Easy')
     created_at = models.DateTimeField(default=date.today, editable=False)
     tags = models.ManyToManyField(Tag)
     is_public = models.BooleanField(default=True)

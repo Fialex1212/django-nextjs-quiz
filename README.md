@@ -14,8 +14,8 @@
 14. Create base page for quiz +
 15. Stopwatch +
 16. Difficulty of quiz +
-17. Create question for quiz 
-18. Create answers for question
+17. Create question for quiz +
+18. Create answers for question +
 19. Can change two previous options
 
 

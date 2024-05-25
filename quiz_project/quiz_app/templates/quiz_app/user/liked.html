@@ -4,61 +4,115 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'quiz_app/css/user.css' %}">
-<link rel="icon" href="/media/site/add-button.svg">
-<title>{{request.user.username}}'s likes</title>
+    <link rel="stylesheet" href="{% static 'quiz_app/css/user.css' %}">
+    <link rel="icon" href="/media/site/add-button.svg">
+    <title>{{request.user.username}}'s likes</title>
 {% endblock %}
 
 {% block content %}
+    <div class="userblock">
+        <div class="userblock-info">
+            <div class="userblock-left">
+                {% if user_avatar.avatar %}
+                    <img class="user-avatar" src="{{ user_avatar.avatar.url }}" alt="">
+                {% else %}
+                    <img class="user-avatar" src="/media/site/user_avatar.jpg" alt="">
+                {% endif %}
+            </div>
+            <div class="userblock-right">
+                <a href="{% url 'user' pk=user.pk %}"><h2 class="username">{{user.username}}</h2></a>
+                <h4 class="useremail">{{user.email}}</h4>
+            </div>
+            <div class="userblock-buttons">
+                <a class="userblock-liked button" href="{% url 'user_liked' pk=user.pk %}">
+                    <img class="userblock-img" src="/media/site/heart_full.svg" alt="">
+                </a>
+                {% if request.user.pk == user.pk %}
+                    <div class="userblock-liked button" onclick="showOptionBlock()">
+                        <img id="opetSettings" class="userblock-img" src="/media/site/settings.svg" alt="">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="user-quizzes">
+        {% for quiz in liked %}
+            <div>
+                <div class="quiz">
+                    <div class="quiz-rating">
+                        {% if quiz.quiz.id in liked_quizzes %}
+                            <a onclick="dislikeQuiz({{ quiz.quiz.id }}, '{{ quiz.quiz }}')"><img src="/media/site/heart_full.svg" alt="heart"></a>
+                        {% else %}
+                            <a onclick="likeQuiz({{ quiz.quiz.id }}, '{{ quiz.quiz }}')"><img src="/media/site/heart_empty.svg" alt="heart"></a>
+                        {% endif %}
+                    </div>
+                        <a href="{% url 'quiz_details' id=quiz.id %}" class="quiz-title">{{quiz.quiz.title}}</a>
+                    <div class="quiz-info">
+                        <div class="info-user">
+                            {% if quiz.quiz.author.user_avatar.avatar %}
+                                <img class="user-avatar" src="{{ user_avatar.avatar.url }}" alt="">
+                            {% else %}
+                                <img class="user-avatar" src="/media/site/user_avatar.jpg" alt="">
+                            {% endif %}
+                            <p>{{quiz.quiz.author}}</p>
+                        </div>
+                        <div class="date">{{quiz.quiz.created_at|date:"d F Y"}}</div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
-<div class="userblock">
-    <div class="userblock-info">
-        <div class="userblock-left">
-            {% if user_avatar.avatar %}
+    <div id="popup" class="popup">
+        <span onclick="closeButton()" class="close" id="closePopup">&times;</span>
+        <a id="change-avatar">
+            <p>Changer avatar</p>
+            {% if user.user_avatra.avatar %}
                 <img class="user-avatar" src="{{ user_avatar.avatar.url }}" alt="">
             {% else %}
                 <img class="user-avatar" src="/media/site/user_avatar.jpg" alt="">
             {% endif %}
-        </div>
-        <div class="userblock-right">
-            <h2 class="username">{{user.username}}</h2>
-            <h4 class="useremail">{{user.email}}</h4>
-        </div>
+            <img src="" alt="">
+        </a>
+        <a id="change-username">Change username</a>
+        <a id="change-email">Change email</a>
+        <a id="change-password">Change password</a>
     </div>
-</div>
 
-<div class="user-quizzes">
-    {% for quiz in liked %}
-        <div href="{% url 'quiz_details' id=quiz.quiz.id %}">
-            <div class="quiz">
-                <div class="quiz-rating">
-                    {% if quiz.quiz.id in liked_quizzes %}
-                        <a onclick="dislikeQuiz({{ quiz.quiz.id }}, '{{ quiz.quiz.title }}')"><img src="/media/site/heart_full.svg" alt="heart"></a>
-                    {% else %}
-                        <a onclick="likeQuiz({{ quiz.quiz.id }}, '{{ quiz.quiz.title }}')"><img src="/media/site/heart_empty.svg" alt="heart"></a>
-                    {% endif %}
-                </div>
-                    <a class="quiz-title" href="{% url 'quiz_details' id=quiz.quiz.id %}">
-                        {{quiz.quiz.title}}
-                    </a>
-                <div class="quiz-info">
-                    <div class="info-user">
-                        {% if quiz.quiz.author.user_avatar.avatar %}
-                            <img class="user-avatar" src="{{ quiz.user_avatar.avatar.url }}" alt="">
-                        {% else %}
-                            <img class="user-avatar" src="/media/site/user_avatar.jpg" alt="">
-                        {% endif %}
-                        <p>{{quiz.quiz.author}}</p>
-                    </div>
-                    <div class="date">{{quiz.quiz.created_at|date:"d F Y"}}</div>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-</div>
+    <div class="popup-change-username">
+        <a onclick="backButton()" id="back-button">back</a>
+        <form action="{% url 'user_change_username' pk=request.user.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="new_username" placeholder="*New username">
+            <input type="text" name="password" placeholder="*Password">
+            <button>Submit</button>
+        </form>
+        <span onclick="closeButton()" class="close" id="closePopup">&times;</span>
+    </div>
 
-{% endblock %}
+    <div class="popup-change-email">
+        <a onclick="backButton()" id="back-button">back</a>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="text" placeholder="*New emial">
+            <input type="password" placeholder="*Password">
+            <button>Submit</button>
+        </form>
+        <span onclick="closeButton()" class="close" id="closePopup">&times;</span>
+    </div>
 
-{% block scripts %}
+    <div class="popup-change-password">
+        <a onclick="backButton()" id="back-button">back</a>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="password" placeholder="*New password">
+            <input type="password" placeholder="*Repeat new password">
+            <input type="password" placeholder="*Password">
+            <button>Submit</button>
+        </form>
+        <span onclick="closeButton()" class="close" id="closePopup">&times;</span>
+    </div>
 
+    <div id="blockout" class="blockout"></div>
+<script src="{% static 'quiz_app/js/popup.js' %}" ></script>
 {% endblock %}

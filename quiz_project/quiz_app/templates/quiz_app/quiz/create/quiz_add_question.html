@@ -3,16 +3,13 @@
 
 {% block title %}{{title}}{% endblock %}
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'quiz_app/css/quiz/quiz.css' %}">
-    <link rel="icon" href="/media/site/add-button.svg">
-    <title>Create quiz</title>
+    <link rel="stylesheet" href="{% static 'quiz_app/css/quiz.css' %}">
 {% endblock %}
 
 {% block content %}
-<form class="form" action="" method="POST">
+<form class="form" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
-    <input class="quiz-input create-quiz-input" type="text" name="new_title" placeholder="*Title of quiz">
-    <input type="text" class="quiz-input create-quiz-input" name="tags" placeholder="*Tags of quiz">
+    <input class="quiz-input create-quiz-input" type="text" name="content" placeholder="*Question">
     <button class="quiz-btn" type="submit">Create</button>
 </form>
 {% if form.errors %}
