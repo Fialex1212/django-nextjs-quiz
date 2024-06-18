@@ -14,9 +14,11 @@ urlpatterns = [
 
     #quiz
     path('quiz/create/', create_quiz, name='create_quiz'),
-    path('quiz/details/<int:id>/', quiz_details, name='quiz_details'),
+    path('quiz/<int:quiz_id>/delete', quiz_delete, name='quiz_delete'),
+    path('quiz/<int:quiz_id>/questions/<int:question_id>/delete', quiz_question_delete, name='quiz_question_delete'),
+    path('quiz/<int:id>/details/', quiz_details, name='quiz_details'),
     path('quiz/<int:quiz_id>/question/<int:question_id>/', quiz, name='quiz'),
-    path('quiz/result/<int:quiz_id>/ ', quiz_result, name='quiz_result'),
+    path('quiz/<int:quiz_id>/result/ ', quiz_result, name='quiz_result'),
     path('quiz_like/<int:quiz_id>/', quiz_like, name='quiz_like'),
     path('quiz_dislike/<int:quiz_id>/', quiz_dislike, name='quiz_dislike'),
     path("quiz/<int:quiz_id>/change/", quiz_change, name="quiz_change"),

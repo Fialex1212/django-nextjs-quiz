@@ -17,13 +17,17 @@
         <form class="form" method="POST" enctype="multipart/form-data" name="form-answer">
             {% csrf_token %}
             <p>Old answer: {{answer.content}}</p>
+            {% if answer.is_correct %}
+                <p>is correct</p>
+            {% endif %}
             <input class="quiz-input create-quiz-input" name="answer-contnet" type="text" placeholder="*New answer">
             <button class="quiz-btn" type="submit">Change answer</button>
         </form>
     {% endfor %}
 </div>
 <div class="answer-add-div">
-    <a href="{% url 'quiz_add_answer' quiz_id=quiz.id question_id=question.id %}" class="quiz-btn add-answer">Add answers</a>
+    <a href="{% url 'quiz_add_answer' quiz_id=quiz.id question_id=question.id %}" class="quiz-btn add-answer">Add answer</a>
+    <a href="{% url 'quiz_question_delete' quiz_id=quiz.id question_id=question.id %}" class="quiz-btn add-answer">Delete question</a>
 </div>
 {% if form.errors %}
     <ul>

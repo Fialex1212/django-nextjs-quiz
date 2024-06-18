@@ -8,7 +8,6 @@ from django.utils import timezone
 from django.http import JsonResponse
 from .forms import *
 from .models import *
-import time
 
 
 #login/sign-in
@@ -100,12 +99,62 @@ def quiz_details(request,  id):
 
 
 def quiz(request, quiz_id, question_id):
-    quiz = Quiz.objects.get(id=quiz_id)
-    question = Question.objects.get(quiz__id=quiz_id, id=question_id)
-    next_question = Question.objects.filter(quiz__id=quiz_id, id__gt=question_id).order_by('id').first()
-    context = {'quiz': quiz, 'question': question, 'next_question': next_question}
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    questions = quiz.question_set.all()
+    total_questions = questions.count()
+    current_question = get_object_or_404(Question, id=question_id, quiz=quiz)
+    next_question = list(questions.values_list('id', flat=True))
+    try:
+        next_question_index = next_question.index(current_question.id) + 1
+        next_question_id = next_question[next_question_index]
+    except IndexError:
+        next_question_id = None
+
+    if request.method == "POST":
+        form = QuizForm(request.POST, questions=[current_question])
+        if form.is_valid():
+            if 'quiz_answers' not in request.session:
+                request.session['quiz_answers'] = {}
+            selected_answer_id = form.cleaned_data[f'question_{current_question.id}']
+            request.session['quiz_answers'][str(current_question.id)] = selected_answer_id
+
+            if next_question_id is None:
+                return redirect('quiz_result', quiz_id=quiz_id)
+            else:
+                return redirect('quiz', quiz_id=quiz_id, question_id=next_question_id)
+        else:
+            print(form.errors)
+    else:
+        form = QuizForm(questions=[current_question])
+
+    # next_question = Question.objects.filter(quiz__id=quiz_id, id__gt=question_id).order_by('id').first()
+
+    # context = {'quiz': quiz, 'question': question, 'next_question': next_question}
+    context = {'quiz': quiz, 'form': form, 'question_id': question_id, 'total_questions': total_questions}
     return render(request, 'quiz_app/quiz/quiz.html', context)
 
+
+def quiz_result(request, quiz_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    questions = quiz.question_set.all()
+    total_questions = questions.count()
+    score = 0
+
+    for question in questions:
+        selected_answer_id = request.session['quiz_answers'].get(str(question.id))
+        if selected_answer_id:
+            selected_answer = get_object_or_404(Answer, id=selected_answer_id)
+            print(selected_answer)
+            if selected_answer.is_correct:
+                score += 1
+    del request.session['quiz_answers']  # Clear the session after scoring
+
+    context = {
+        'quiz': quiz,
+        'score': score,
+        'total_questions': total_questions
+    }
+    return render(request, 'quiz_app/quiz/quiz_result.html', context)
 
 @login_required(login_url='login')
 def quiz_like(request, quiz_id):
@@ -154,6 +203,29 @@ def create_quiz(request):
 
 
 @login_required(login_url='login')
+def quiz_delete(request, quiz_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    try:
+        quiz.delete()
+        messages.success(request, f"{quiz.title} deleted successfuly")
+    except Exception as e:
+        messages.error(request, f"Error deleting quiz: {str(e)}")
+    return redirect('home')
+
+
+@login_required(login_url='login')
+def quiz_question_delete(request, quiz_id, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        question.delete()
+        messages.success(request, f"{question.content} deleted successfuly")
+    except Exception as e:
+        messages.error(request, f"Error deleting question: {str(e)}")
+    return redirect('quiz_change', quiz_id=quiz_id)
+
+
+
+@login_required(login_url='login')
 def quiz_change(request, quiz_id):
     quiz = get_object_or_404(Quiz, pk=quiz_id)
     questions = Question.objects.filter(quiz=quiz)
@@ -161,7 +233,7 @@ def quiz_change(request, quiz_id):
         new_title = request.POST.get('title')
         quiz.title = new_title
         quiz.save()
-        return redirect('home')
+        return redirect('quiz_change', quiz_id=quiz.id)
     context = {'quiz': quiz, 'questions': questions}
     return render(request, 'quiz_app/quiz/quiz_change.html', context)
 
@@ -243,11 +315,6 @@ def quiz_add_answer(request, quiz_id, question_id):
         form = CreateAnswerForm()
     context = {'quiz': quiz, 'answer_form': form}
     return render(request, 'quiz_app/quiz/create/quiz_add_answer.html', context)
-
-
-def quiz_result(request):
-    context = {}
-    return render(request, 'quiz_app/quiz/quiz_result', context)
 
 
 #user

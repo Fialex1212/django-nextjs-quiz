@@ -65,6 +65,17 @@ class ChangeUserPasswordForm(forms.Form):
     new_password = forms.CharField(widget=forms.PasswordInput, required=True)
     new_password_repeated = forms.CharField(widget=forms.PasswordInput, required=True)
     password = forms.CharField(widget=forms.PasswordInput, required=True)
+    
+
+class QuizForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        questions = kwargs.pop('questions', [])
+        super(QuizForm, self).__init__(*args, **kwargs)
+        
+        for question in questions:
+            choices = [(answer.id, answer.content) for answer in question.answer_set.all()]
+            self.fields[f'question_{question.id}'] = forms.ChoiceField(choices=choices, widget=forms.RadioSelect, required=True)
+
 
 
     

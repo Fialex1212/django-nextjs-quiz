@@ -10,8 +10,9 @@
 <div class="change-title">
     <form class="form" action="" method="POST">
         {% csrf_token %}
-        <input class="quiz-input create-quiz-input" type="text" name="title" placeholder="*Title of quiz">
-        <button class="quiz-btn" type="submit">Create</button>
+        <p class="form-title">{{quiz.title}}</p>
+        <input class="quiz-input create-quiz-input" type="text" name="title" placeholder="*Title of quiz" required>
+        <button class="quiz-btn" type="submit">Change</button>
     </form>
 </div>
 <div class="questions">
@@ -23,6 +24,9 @@
     {% endfor %}
     <div class="question">
         <a href="{% url 'quiz_add_question' quiz_id=quiz.id %}">Add question +</a>
+    </div>
+    <div class="delete-quiz answer-add-div">
+        <a href="{% url 'quiz_delete' quiz_id=quiz.id %}" class="quiz-btn add-answer">Delete quiz</a>
     </div>
 </div>
 {% if form.errors %}

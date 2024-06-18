@@ -16,7 +16,7 @@
     {% endif %}
     <p class="question-content">{{ question }}</p>
 </div>
-<br><p class="stopwatch" id="stopwatch">360</p><br>
+<br><p class="stopwatch" id="stopwatch">10</p><br>
 <form action="" method="POST">
     <div class="answers">
         {% for answer in question.answer_set.all %}
@@ -32,9 +32,14 @@
         {% endfor %}
     </div>
 </form>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% if forloop.counter < total_questions %}Next{% else %}Submit{% endif %}</button>
+</form>
 
 {% endblock %}
 {% block scripts %}
-<script src="{% static 'quiz_app/js/stopwatch.js' %}"></script>
+<!-- <script src="{% static 'quiz_app/js/stopwatch.js' %}"></script> -->
 
 {% endblock %}

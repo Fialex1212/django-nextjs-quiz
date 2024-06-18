@@ -24,9 +24,13 @@
         </ul>
     </div>
     {% if request.user.pk == quiz.author.pk %}
-        <a href="">Change quiz</a>
+        <a href="{% url 'quiz_change' quiz_id=quiz.id %}">Change quiz</a>
     {% endif %}
-    <a class="take-btn" href="{% url 'quiz' quiz_id=quiz.pk question_id=question.id %}">Take Quiz</a>
+    {% if quiz.question_set.exists %}
+        <a class="take-btn" href="{% url 'quiz' quiz_id=quiz.pk question_id=question.id %}">Take Quiz</a>
+    {% else %}
+        <a class="take-btn" href="{% url 'home' %}">Quiz in progress</a>
+    {% endif %}
     <a href="" id="copyButton" class="take-btn">Copy Link</a>
 </div>
 {% endblock %}

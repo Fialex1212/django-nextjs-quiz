@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 class Tag(models.Model):
@@ -84,4 +82,5 @@ class LikeQuiz(models.Model):
 
     class Meta:
         verbose_name_plural = "like quizzes"
+
 
