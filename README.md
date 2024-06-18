@@ -1,43 +1,24 @@
-1. User settings(change username, email, password, avatar)
+################################################################
+!!!TODO!!!
+1. Change user info +
 2. User profile + 
-3. Create a quiz +
-4. Change a quiz +
-5. Use images as answer +
-6. Search quiz +
-7. Ratting system +
-8. Login/Sign in pages +
+3. Create a quiz and change +
+4. Use images as answer +
+5. Search quiz +
+6. Live search 
+7. Ratting system 
+8. SignUp/SignIn system +
 9. Like system +
-10. Take test +
-11. Quiz tags and description +
-12. Searching by tags 
-13. Error and success messages +
-14. Create base page for quiz +
-15. Stopwatch +
-16. Difficulty of quiz +
-17. Create question for quiz +
-18. Create answers for question +
-19. Can change two previous options
+10. Take quiz +
+11. Quiz tags, description and difficulty +
+12. Error and success messages of necessary actions +
+13. Create base page for quiz +
+14. Stopwatch for quiz
+15. Create and change a question and answer for quiz +
+16. Adaptive for every device
+################################################################
 
 
-git add .
 
-git commit -m "version of commit"
-
-git branch -M main
-
-git remote add origin https://github.com/Fialex1212/django-quiz_test.git
-
-git push -u origin main
-
-home.html
-
-    {{ like_counts|get_item:quiz.id }}
-
-quiz.html
-
-    {{ answer.content }}
-    {% if answer.content_image %}
-        <img src="{{ answer.content_image.url }}" alt="{{ answer }}">
-    {% endif %}
-    {% if answer.is_correct %}(Correct){% endif %}
+This web applications creted for take quizzes
 
